@@ -18,7 +18,17 @@ public static class Divisors {
     /// <returns>List of divisors</returns>
     private static List<int> FindDivisors(int number) {
         List<int> results = new();
-        // TODO problem 1
+        foreach (int i in Enumerable.Range(1, number))
+        {
+            if (number % i == 0 && i != number)
+            {
+                results.Add(i);
+            }
+            else
+            {
+                continue;
+            }
+        }
         return results;
     }
 }

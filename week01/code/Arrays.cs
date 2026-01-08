@@ -6,14 +6,19 @@ public static class Arrays
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
+    /// 
+    /// 
+    /// Create an array and then loop through a range of the length
+    /// each time I loop I will add the multiple to the index of the array
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        double[] ListofMultiples = new double[length];
+        for (int i = 0; i < length; i++)
+        {
+            ListofMultiples[i] = number * (i + 1);
+        }
 
-        return []; // replace this return statement with your own
+        return ListofMultiples; // replace this return statement with your own
     }
 
     /// <summary>
@@ -23,11 +28,21 @@ public static class Arrays
     ///
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
+    /// 
+    /// I created 2 empty lists and I put the 2 different pieces of the list split by the amount
+    /// Then I cleared the original list and added the 2 pieces to appear rotated to the right. 
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        int split = data.Count - amount;
+
+        List<int> modifList1 = new List<int>();
+        List<int> modifList2 = new List<int>();
+
+        modifList1.AddRange(data.GetRange(split, amount));
+        modifList2.AddRange(data.GetRange(0, split));
+
+        data.Clear();
+        data.AddRange(modifList1);
+        data.AddRange(modifList2);
     }
 }
