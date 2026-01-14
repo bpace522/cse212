@@ -11,7 +11,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: Bob was expected but Sue was the actual returned. What was going on was-
+    // in the AddPerson function it was using the insert method instead of add and that allowed this test to pass.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -34,6 +35,8 @@ public class TakingTurnsQueueTests
             }
 
             var person = players.GetNextPerson();
+            Console.WriteLine(person);
+            Console.WriteLine(i);
             Assert.AreEqual(expectedResult[i].Name, person.Name);
             i++;
         }
@@ -43,7 +46,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found: This test had the same problem as the one above it and was resolved the same way.
+    // The AddPerson function needed to be Add() not Insert()
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -85,7 +89,10 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: It appears as though because Tim never ends that the code recognizes it once instead of allowing
+    // him to continuously be placed at the end of the queue. The GetNextPerson method only checks if the turns is >= 1
+    // The case of 0 is never being handled. This was fixed in the GetNextPerson method adding lines that check if turns
+    // is <= 0 and returning the person to the queue if the condition is met. 
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -104,6 +111,7 @@ public class TakingTurnsQueueTests
         for (int i = 0; i < 10; i++)
         {
             var person = players.GetNextPerson();
+            Console.WriteLine(person);
             Assert.AreEqual(expectedResult[i].Name, person.Name);
         }
 
@@ -116,7 +124,8 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: This was resolved by allowing handling of <= 0 in people.Turns The problem was that tim having negative turns
+    // Was never handled in GetNextPerson so he was never Enqueued. I added code to GetNextPerson to fix that and allow infinite turns.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;

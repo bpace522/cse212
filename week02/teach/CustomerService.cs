@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using System.Security.Cryptography.X509Certificates;
+
+/// <summary>
 /// Maintain a Customer Service Queue.  Allows new customers to be 
 /// added and allows customers to be serviced.
 /// </summary>
@@ -11,24 +13,55 @@ public class CustomerService {
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: Checking to make sure when service queue is created with size <= 0 that it sets 10 as the size
+        // Expected Result: Queue with size 10 that can be enqueued and dequeued
         Console.WriteLine("Test 1");
 
-        // Defect(s) Found: 
+        var csq = new CustomerService(0);
+
+        csq.AddNewCustomer();
+        Console.WriteLine(csq);
+        csq.ServeCustomer();
+        Console.WriteLine(csq);
+
+
+
+        // Defect(s) Found: In the serve customer function the .removeAt() was placed before the other lines and that did not allow
+        // for the same variable to be used, as it was removed. 
 
         Console.WriteLine("=================");
 
         // Test 2
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: Checking what happens when it is empty
+        // Expected Result: Error messages indicating if the queue is empty
         Console.WriteLine("Test 2");
+
+        var customerQueue = new CustomerService(1);
+
+        customerQueue.AddNewCustomer();
+        Console.WriteLine(customerQueue);
+        customerQueue.ServeCustomer();
+        customerQueue.ServeCustomer();
+        Console.WriteLine(customerQueue);
 
         // Defect(s) Found: 
 
         Console.WriteLine("=================");
 
         // Add more Test Cases As Needed Below
+        // Test 2
+        // Scenario: Checking what happens when it is full
+        // Expected Result: Error messages indicating if the queue is full
+        Console.WriteLine("Test 3");
+
+        var customerQueue2 = new CustomerService(1);
+
+        customerQueue2.AddNewCustomer();
+        customerQueue2.AddNewCustomer();
+
+        // Defect(s) Found: 
+
+        Console.WriteLine("=================");
     }
 
     private readonly List<Customer> _queue = new();
@@ -67,7 +100,7 @@ public class CustomerService {
     /// </summary>
     private void AddNewCustomer() {
         // Verify there is room in the service queue
-        if (_queue.Count > _maxSize) {
+        if (_queue.Count >= _maxSize) {
             Console.WriteLine("Maximum Number of Customers in Queue.");
             return;
         }
@@ -88,9 +121,9 @@ public class CustomerService {
     /// Dequeue the next customer and display the information.
     /// </summary>
     private void ServeCustomer() {
-        _queue.RemoveAt(0);
         var customer = _queue[0];
         Console.WriteLine(customer);
+        _queue.RemoveAt(0);
     }
 
     /// <summary>
