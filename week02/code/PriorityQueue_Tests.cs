@@ -40,7 +40,8 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Adding more than one item with highest priority
     // Expected Result: The highest priority closest to the front will be removed first. 
-    // Defect(s) Found: 
+    // Defect(s) Found: The Dequeue method was returning the last item with highest priority instead of first because it was 
+    // >= instead of >
     public void TestPriorityQueue_2()
     {
         var data1 = new PriorityItem("curse", 1);
@@ -60,6 +61,19 @@ public class PriorityQueueTests
             var person = priorityQueue.Dequeue();
             Assert.AreEqual(expectedOutput[i].Value, person);
         }
+    }
+
+
+    [TestMethod]
+    //Scenario: Testing an empty queue, confirming the thrown error and message
+    // Expected Result: Correct error thrown, and correct message displayed
+    // Defect(s) found: 
+    public void TestPriorityQueue_3()
+    {
+        var priorityQueueempty = new PriorityQueue();
+        var exception = Assert.ThrowsException<InvalidOperationException>(() => priorityQueueempty.Dequeue());
+
+        Assert.AreEqual("The queue is empty.", exception.Message);
     }
 
     // Add more test cases as needed below.
